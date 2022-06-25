@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  production:
+    container_name: ateliware-challenge-client-production
+    image: ateliware-challenge-client-production:1.0.0
+    restart: unless-stopped
+    build:
+      context: .
+      target: production
+      dockerfile: ./dockerfile
+    volumes:
+      - .:/usr/app
+    network_mode: host
+
+  development:
+    container_name: ateliware-challenge-client-development
+    image: ateliware-challenge-client-development:1.0.0
+    restart: unless-stopped
+    build:
+      context: .
+      target: development
+      dockerfile: ./dockerfile
+    volumes:
+      - .:/usr/app
+    network_mode: host
+
