@@ -8,7 +8,8 @@ import {
   Tr,
   Th,
   Text,
-  Link
+  Link,
+  Tooltip
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { RepoCollection } from '../../entities/repo-collection.entity'
@@ -46,7 +47,7 @@ export function RepositoryTable({
             <Th>Description</Th>
             <Th>Saved</Th>
             <Th position="sticky" right="0" backgroundColor="#fff">
-              Action
+              Details
             </Th>
           </Tr>
         </Thead>
@@ -62,8 +63,22 @@ export function RepositoryTable({
               </Td>
               <Td>{repository.description}</Td>
               <Td>{repository.is_storaged}</Td>
-              <Td position="sticky" right="0" backgroundColor="#fff">
-                <Button size="sm">Save</Button>
+              <Td
+                position="sticky"
+                right="0"
+                backgroundColor="#fff"
+                textAlign="center"
+              >
+                <Tooltip label="More" bg="red.300" placement="top" hasArrow>
+                  <Button
+                    size="xs"
+                    variant="ghost"
+                    colorScheme="red"
+                    rounded="full"
+                  >
+                    ...
+                  </Button>
+                </Tooltip>
               </Td>
             </Tr>
           ))}
