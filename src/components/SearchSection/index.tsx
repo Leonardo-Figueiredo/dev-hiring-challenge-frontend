@@ -1,5 +1,5 @@
 import { useLazyQuery } from '@apollo/client'
-import { Button, Flex, Text } from '@chakra-ui/react'
+import { Button, Flex, Text, useToast } from '@chakra-ui/react'
 import { useCallback, useState } from 'react'
 import { RepoCollection } from '../../entities/repo-collection.entity'
 import {
@@ -10,18 +10,41 @@ import { RepositoryTable } from '../RepositoryTable'
 
 export function SearchSection() {
   const [repositories, setRepositories] = useState<RepoCollection[]>([])
-  const [fetchRepositories, { error }] =
-    useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
+  const [fetchRepositories] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
+  const toast = useToast()
 
   const handleButtonSearch = useCallback(async () => {
-    const { data } = await fetchRepositories()
+    const { data, error } = await fetchRepositories()
 
-    if (data?.repoFindAll) setRepositories(data.repoFindAll)
-  }, [fetchRepositories])
+    if (error)
+      toast({
+        title: 'Error',
+        description: 'Fetch repositories is not available, try again later.',
+        status: 'error',
+        position: 'bottom-right'
+      })
+
+    if (data?.repoFindAll) {
+      setRepositories(data.repoFindAll)
+
+      toast({
+        title: 'Search Success',
+        description: 'Check the top rated repositories!',
+        status: 'success',
+        position: 'bottom-right'
+      })
+    }
+  }, [fetchRepositories, toast])
 
   return (
     <>
-      <Flex alignItems="center" mt="10" flexWrap="wrap" justifyContent="center">
+      <Flex
+        alignItems="center"
+        mt="10"
+        flexWrap="wrap"
+        justifyContent="center"
+        mx={[2]}
+      >
         <Text fontSize="xl" textAlign="center">
           Search the ⭐ top rated ⭐ repositories of JavaScript, Python, C, Ruby
           💎 and Elixir
