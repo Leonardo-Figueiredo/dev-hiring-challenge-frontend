@@ -59,12 +59,7 @@ export function SearchSection() {
         </Button>
       </Flex>
 
-      <Flex
-        flexWrap="wrap"
-        justifyContent={['space-between', 'space-between', 'center', 'center', 'space-between']}
-        maxWidth="100%"
-        alignItems="center"
-      >
+      <Flex flexWrap="wrap" justifyContent={['center']} maxWidth="100%" alignItems="center">
         {!!repositories.length &&
           repositories.map(repositoryCollection => (
             <RepositoryTable
