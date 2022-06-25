@@ -42,7 +42,14 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
 
   return (
     <>
-      <Flex flexDir="column" my={['5']} bg="white" rounded="lg" pt="2">
+      <Flex
+        flexDir="column"
+        my={['5']}
+        bg="white"
+        rounded="lg"
+        width={['100%', 'unset', 'unset', 'unset', 'unset']}
+        pt="2"
+      >
         <Text mb={['4']} ml="4" fontWeight="bold">
           {repository_collection.language}
         </Text>
