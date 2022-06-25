@@ -41,7 +41,8 @@ export function SearchSection() {
     <>
       <Flex alignItems="center" my="10" flexWrap="wrap" justifyContent="center" mx={[8]}>
         <Text fontSize="xl" textAlign="center">
-          Search the ⭐ best match ⭐ repositories of JavaScript, Python, C, Ruby and Elixir
+          Search the ⭐ best match ⭐ repositories of TypeScript, JavaScript, Python, C, Ruby and
+          Elixir
         </Text>
 
         <Button
