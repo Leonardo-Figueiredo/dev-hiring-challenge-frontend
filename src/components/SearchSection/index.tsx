@@ -11,8 +11,7 @@ import { RepositoryTable } from '../RepositoryTable'
 export function SearchSection() {
   const [repositories, setRepositories] = useState<RepoCollection[]>([])
 
-  const [fetchRepositories, { loading }] =
-    useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
+  const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
   const toast = useToast()
 
   const handleButtonSearch = useCallback(async () => {
@@ -40,16 +39,9 @@ export function SearchSection() {
 
   return (
     <>
-      <Flex
-        alignItems="center"
-        my="10"
-        flexWrap="wrap"
-        justifyContent="center"
-        mx={[8]}
-      >
+      <Flex alignItems="center" my="10" flexWrap="wrap" justifyContent="center" mx={[8]}>
         <Text fontSize="xl" textAlign="center">
-          Search the ⭐ best match ⭐ repositories of JavaScript, Python, C,
-          Ruby and Elixir
+          Search the ⭐ best match ⭐ repositories of JavaScript, Python, C, Ruby and Elixir
         </Text>
 
         <Button
@@ -68,13 +60,7 @@ export function SearchSection() {
 
       <Flex
         flexWrap="wrap"
-        justifyContent={[
-          'space-between',
-          'space-between',
-          'center',
-          'center',
-          'space-between'
-        ]}
+        justifyContent={['space-between', 'space-between', 'center', 'center', 'space-between']}
         maxWidth="100%"
         alignItems="center"
       >

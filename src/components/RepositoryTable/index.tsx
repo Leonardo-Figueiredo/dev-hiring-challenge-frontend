@@ -22,9 +22,7 @@ interface RepositoryTableProps {
   repository_collection: RepoCollection
 }
 
-export function RepositoryTable({
-  repository_collection
-}: RepositoryTableProps) {
+export function RepositoryTable({ repository_collection }: RepositoryTableProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [repositories, setRepositories] = useState<Repo[]>([])
@@ -81,12 +79,7 @@ export function RepositoryTable({
                   </Td>
                   <Td>{repository.description}</Td>
                   <Td>{repository.is_storaged}</Td>
-                  <Td
-                    position="sticky"
-                    right="0"
-                    backgroundColor="white"
-                    textAlign="center"
-                  >
+                  <Td position="sticky" right="0" backgroundColor="white" textAlign="center">
                     <Tooltip label="More" bg="red.300" placement="top" hasArrow>
                       <Button
                         size="xs"
@@ -106,11 +99,7 @@ export function RepositoryTable({
         </TableContainer>
       </Flex>
 
-      <RepositoryDetailModal
-        repository={selectedRepository}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
+      <RepositoryDetailModal repository={selectedRepository} isOpen={isOpen} onClose={onClose} />
     </>
   )
 }

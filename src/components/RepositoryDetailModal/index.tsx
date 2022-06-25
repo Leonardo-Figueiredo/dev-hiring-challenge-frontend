@@ -30,15 +30,9 @@ interface RepositoryDetailModalProps {
   repository: Repo
 }
 
-export function RepositoryDetailModal({
-  isOpen,
-  onClose,
-  repository
-}: RepositoryDetailModalProps) {
+export function RepositoryDetailModal({ isOpen, onClose, repository }: RepositoryDetailModalProps) {
   const toast = useToast()
-  const [saveRepository, { loading }] = useMutation<Repo, CreateRepo>(
-    CREATE_REPO
-  )
+  const [saveRepository, { loading }] = useMutation<Repo, CreateRepo>(CREATE_REPO)
 
   const handleSaveRepository = useCallback(async () => {
     const clonedRepository = structuredClone(repository)
@@ -129,11 +123,7 @@ export function RepositoryDetailModal({
 
         <ModalFooter>
           {!repository.is_storaged && (
-            <Button
-              variant="outline"
-              onClick={handleSaveRepository}
-              isLoading={loading}
-            >
+            <Button variant="outline" onClick={handleSaveRepository} isLoading={loading}>
               Save
             </Button>
           )}
