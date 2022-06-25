@@ -9,10 +9,10 @@ import {
 import { RepositoryTable } from '../RepositoryTable'
 
 export function SearchSection() {
-  const [repositories, setRepositories] = useState<RepoCollection[]>([])
-
-  const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
   const toast = useToast()
+
+  const [repositories, setRepositories] = useState<RepoCollection[]>([])
+  const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
 
   const handleButtonSearch = useCallback(async () => {
     const { data, error } = await fetchRepositories()
@@ -55,7 +55,7 @@ export function SearchSection() {
           isLoading={loading}
           disabled={loading}
         >
-          {repositories ? 'Search again' : 'Search'}
+          {repositories[0] ? 'Search again' : 'Search'}
         </Button>
       </Flex>
 
