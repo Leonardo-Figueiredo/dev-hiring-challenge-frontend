@@ -40,14 +40,14 @@ export function SearchSection() {
     <>
       <Flex
         alignItems="center"
-        mt="10"
+        my="10"
         flexWrap="wrap"
         justifyContent="center"
-        mx={[2]}
+        mx={[8]}
       >
         <Text fontSize="xl" textAlign="center">
-          Search the ⭐ top rated ⭐ repositories of JavaScript, Python, C, Ruby
-          💎 and Elixir
+          Search the ⭐ best match ⭐ repositories of JavaScript, Python, C,
+          Ruby and Elixir
         </Text>
 
         <Button m={['4']} size="sm" onClick={handleButtonSearch}>
