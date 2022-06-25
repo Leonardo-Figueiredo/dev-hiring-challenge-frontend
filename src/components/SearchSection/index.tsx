@@ -12,7 +12,9 @@ export function SearchSection() {
   const toast = useToast()
 
   const [repositories, setRepositories] = useState<RepoCollection[]>([])
-  const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
+  const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL, {
+    fetchPolicy: 'network-only'
+  })
 
   const handleButtonSearch = useCallback(async () => {
     const { data, error } = await fetchRepositories()
@@ -35,7 +37,7 @@ export function SearchSection() {
         position: 'bottom-right'
       })
     }
-  }, [fetchRepositories, toast])
+  }, [fetchRepositories, repositories, toast])
 
   return (
     <>

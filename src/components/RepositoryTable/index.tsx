@@ -16,7 +16,7 @@ import {
 import { useCallback, useEffect, useState } from 'react'
 import { RepoCollection } from '../../entities/repo-collection.entity'
 import { Repo } from '../../entities/repo.entity'
-import { formatNumber } from '../../format-number.util'
+import { formatNumber } from '../../utils/format-number.util'
 import { RepositoryDetailModal } from '../RepositoryDetailModal'
 
 interface RepositoryTableProps {
