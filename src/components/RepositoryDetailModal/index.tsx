@@ -1,5 +1,6 @@
 import {
   Button,
+  Flex,
   HStack,
   Link,
   Modal,
@@ -13,23 +14,26 @@ import {
   Text,
   useToast
 } from '@chakra-ui/react'
-import { CheckIcon, NotAllowedIcon } from '@chakra-ui/icons'
+import { CheckIcon, ExternalLinkIcon, NotAllowedIcon } from '@chakra-ui/icons'
 import { Repo } from '../../entities/repo.entity'
-import { ModalValueLabel } from './ModalValueLabel'
+import { ModalValueLabel } from './ModalDataField/ModalValueLabel'
 import { useCallback, useEffect, useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import {
   CreateRepo,
   CreateRepoInput,
+  CreateRepoVars,
   CREATE_REPO
 } from '../../graphql/mutations/github-repository/createRepo.mutation'
 import { REPO_FIND_ALL } from '../../graphql/queries/github-repository/repoFindAll.query'
-import { formatNumber } from '../../format-number.util'
+import { formatNumber } from '../../utils/format-number.util'
 import {
   FindOneRepo,
   FindOneRepoInput,
   REPO_FIND_ONE
 } from '../../graphql/queries/github-repository/repoFindOne.query'
+import { formatDate } from '../../utils/format-date.util'
+import { ModalDataField } from './ModalDataField'
 
 interface RepositoryDetailModalProps {
   isOpen: boolean
@@ -44,9 +48,10 @@ export function RepositoryDetailModal({
 }: RepositoryDetailModalProps) {
   const toast = useToast()
 
-  const [saveRepository, { loading: saveRepositoryLoading }] = useMutation<Repo, CreateRepo>(
-    CREATE_REPO
-  )
+  const [saveRepository, { loading: saveRepositoryLoading }] = useMutation<
+    CreateRepo,
+    CreateRepoVars
+  >(CREATE_REPO)
   const [findOneRepo, { loading: findOneRepoLoading }] = useLazyQuery<
     FindOneRepo,
     FindOneRepoInput
@@ -66,33 +71,37 @@ export function RepositoryDetailModal({
     if (repository_full_name && isOpen) fetchRepository()
   }, [findOneRepo, repository_full_name, isOpen])
 
-  useEffect(() => {}, [repository])
-
   const handleSaveRepository = useCallback(async () => {
     const clonedRepository = structuredClone(repository)
-
     delete clonedRepository?.db_id
     delete clonedRepository?.is_storaged
-    delete clonedRepository?.created_at
-    delete clonedRepository?.updated_at
-    delete clonedRepository?.deleted_at
+    delete clonedRepository?.storaged_at
 
     const createRepoInput: CreateRepoInput = clonedRepository
 
     const { data: saveRepositoryData } = await saveRepository({
       variables: { createRepoInput },
-      refetchQueries: [{ query: REPO_FIND_ALL }, { query: REPO_FIND_ONE }]
+      refetchQueries: [
+        { query: REPO_FIND_ALL },
+        {
+          query: REPO_FIND_ONE,
+          variables: { repository_full_name }
+        }
+      ],
+      awaitRefetchQueries: true
     })
 
+    if (saveRepositoryData?.createRepo) setRepository(saveRepositoryData.createRepo)
+
     toast({
-      title: `Repository ${saveRepositoryData?.name || repository.name} saved!`,
+      title: `Repository ${saveRepositoryData?.createRepo?.name || repository.name} saved!`,
       description: '',
       status: 'success'
     })
-  }, [saveRepository, repository, toast])
+  }, [repository, saveRepository, repository_full_name, toast])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
 
       <ModalContent>
@@ -100,65 +109,66 @@ export function RepositoryDetailModal({
         <ModalCloseButton />
 
         {findOneRepoLoading ? (
-          <Spinner />
+          <Flex height="450px">
+            <Spinner alignSelf="center" marginX="auto" />
+          </Flex>
         ) : (
           <>
             <ModalBody>
-              <ModalValueLabel label="Name" />
-              <Text color="gray.600">{repository.name}</Text>
+              <Flex alignItems="center" justifyContent="space-between">
+                <ModalDataField label="Name" value={repository.name} />
 
-              <ModalValueLabel label="Full name" />
-              <Text color="gray.600">
-                <Link isExternal href={repository.html_url}>
-                  {repository.full_name}
-                </Link>
-              </Text>
+                <HStack alignItems="center" my="1">
+                  <ModalValueLabel label="Storaged:" />
+                  {repository.is_storaged ? (
+                    <CheckIcon color="green" />
+                  ) : (
+                    <NotAllowedIcon color="red.300" />
+                  )}
+                </HStack>
+              </Flex>
 
-              <ModalValueLabel label="Description" />
-              <Text color="gray.600">{repository.description}</Text>
+              <ModalDataField
+                label="Full name"
+                value={
+                  <Text color="gray.600">
+                    <Link isExternal href={repository.html_url} display="flex" alignItems="center">
+                      {repository.full_name}
+                      <ExternalLinkIcon ml="1" />
+                    </Link>
+                  </Text>
+                }
+              />
 
-              <ModalValueLabel label="Stars" />
-              <Text color="gray.600">{formatNumber(repository.stargazers_count)}</Text>
+              <ModalDataField label="Description" value={repository.description} />
+              <Flex justifyContent="space-between" flexWrap="wrap">
+                <ModalDataField label="Stars" value={formatNumber(repository.stargazers_count)} />
+                <ModalDataField label="Watchers" value={formatNumber(repository.watchers_count)} />
+                <ModalDataField label="Language" value={repository.language} />
+                <ModalDataField label="Open issues" value={repository.open_issues} />
+                <ModalDataField label="Forks" value={repository.forks} />
+              </Flex>
 
-              <ModalValueLabel label="Watchers" />
-              <Text color="gray.600">{formatNumber(repository.watchers_count)}</Text>
-
-              <ModalValueLabel label="Language" />
-              <Text color="gray.600">{repository.language}</Text>
-
-              <ModalValueLabel label="Open issue" />
-              <Text color="gray.600">{repository.open_issues}</Text>
-
-              <ModalValueLabel label="Forks" />
-              <Text color="gray.600">{repository.forks}</Text>
-
-              <HStack alignItems="center">
-                <ModalValueLabel label="Storaged:" />
-                {repository.is_storaged ? (
-                  <CheckIcon color="green" />
-                ) : (
-                  <NotAllowedIcon color="red.300" />
+              <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                <ModalDataField
+                  label="Created on Github"
+                  value={formatDate(repository.created_at)}
+                />
+                <ModalDataField
+                  label="Last Github update"
+                  value={formatDate(repository.updated_at)}
+                />
+                {repository?.is_storaged && (
+                  <ModalDataField label="Storaged at" value={formatDate(repository.storaged_at)} />
                 )}
-              </HStack>
-
-              {repository?.is_storaged && (
-                <>
-                  <ModalValueLabel label="Storaged at" />
-                  <Text color="gray.600">{repository.is_storaged}</Text>
-
-                  <ModalValueLabel label="Updated at" />
-                  <Text color="gray.600">{repository.is_storaged}</Text>
-
-                  <ModalValueLabel label="Deleted at" />
-                  <Text color="gray.600">{repository.is_storaged}</Text>
-                </>
-              )}
+              </Flex>
             </ModalBody>
 
             <ModalFooter>
               {!repository?.is_storaged && (
                 <Button
                   variant="outline"
+                  colorScheme="green"
                   onClick={handleSaveRepository}
                   isLoading={saveRepositoryLoading}
                   disabled={saveRepositoryLoading}
