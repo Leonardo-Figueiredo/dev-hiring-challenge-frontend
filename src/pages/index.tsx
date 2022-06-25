@@ -1,15 +1,18 @@
 import type { NextPage } from 'next'
 import { AppContainer } from '../components/AppContainer'
 import { Header } from '../components/Header'
-import { RepositoryTable } from '../components/RepositoryTable'
+
+import { SearchSection } from '../components/SearchSection'
 
 const Home: NextPage = () => {
   return (
-    <AppContainer>
+    <>
       <Header />
 
-      <RepositoryTable />
-    </AppContainer>
+      <AppContainer>
+        <SearchSection />
+      </AppContainer>
+    </>
   )
 }
 
