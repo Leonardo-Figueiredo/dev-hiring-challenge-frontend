@@ -47,4 +47,6 @@ _You can add a -p flag to set a custom port_
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+[Challenge Original Repository](https://github.com/ateliware/dev-hiring-challenge)
+
 _If you set a port with -p, you should enter on <http://localhost:APP_PORT>_
