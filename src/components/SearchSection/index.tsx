@@ -10,7 +10,9 @@ import { RepositoryTable } from '../RepositoryTable'
 
 export function SearchSection() {
   const [repositories, setRepositories] = useState<RepoCollection[]>([])
-  const [fetchRepositories] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
+
+  const [fetchRepositories, { loading }] =
+    useLazyQuery<RepoFindAll>(REPO_FIND_ALL)
   const toast = useToast()
 
   const handleButtonSearch = useCallback(async () => {
@@ -29,7 +31,7 @@ export function SearchSection() {
 
       toast({
         title: 'Search Success',
-        description: 'Check the top rated repositories!',
+        description: 'Check the best match repositories!',
         status: 'success',
         position: 'bottom-right'
       })
@@ -50,8 +52,17 @@ export function SearchSection() {
           Ruby and Elixir
         </Text>
 
-        <Button m={['4']} size="sm" onClick={handleButtonSearch}>
-          Search
+        <Button
+          m={['4']}
+          size="sm"
+          variant="outline"
+          borderColor="red.200"
+          color="red.500"
+          onClick={handleButtonSearch}
+          isLoading={loading}
+          disabled={loading}
+        >
+          {repositories ? 'Search again' : 'Search'}
         </Button>
       </Flex>
 
