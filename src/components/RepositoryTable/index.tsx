@@ -1,3 +1,4 @@
+import { AddIcon } from '@chakra-ui/icons'
 import {
   Button,
   Table,
@@ -8,7 +9,6 @@ import {
   Tr,
   Th,
   Text,
-  Link,
   Tooltip,
   useDisclosure,
   Flex
@@ -16,6 +16,7 @@ import {
 import { useCallback, useEffect, useState } from 'react'
 import { RepoCollection } from '../../entities/repo-collection.entity'
 import { Repo } from '../../entities/repo.entity'
+import { formatNumber } from '../../format-number.util'
 import { RepositoryDetailModal } from '../RepositoryDetailModal'
 
 interface RepositoryTableProps {
@@ -45,6 +46,7 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
       <Flex
         flexDir="column"
         my={['5']}
+        mx={['10']}
         bg="white"
         rounded="lg"
         width={['100%', 'unset', 'unset', 'unset', 'unset']}
@@ -60,17 +62,15 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
           _last={{
             marginRight: ['unset', 'unset', 'unset', '50%']
           }}
-          overflowX="scroll"
         >
-          <Table size="sm">
+          <Table size="sm" w="400px">
             <Thead>
               <Tr>
                 <Th>Name</Th>
-                <Th>Full Name</Th>
-                <Th>Description</Th>
-                <Th>Saved</Th>
+                <Th>Stars</Th>
+                <Th>Watchers</Th>
                 <Th position="sticky" right="0" backgroundColor="#fff">
-                  Info
+                  More
                 </Th>
               </Tr>
             </Thead>
@@ -78,14 +78,11 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
             <Tbody>
               {repositories.map(repository => (
                 <Tr key={repository.id}>
-                  <Td>{repository.name}</Td>
-                  <Td>
-                    <Link href={repository.html_url} isExternal={true}>
-                      {repository.full_name}
-                    </Link>
+                  <Td fontWeight="medium" color="gray.900">
+                    {repository.name}
                   </Td>
-                  <Td>{repository.description}</Td>
-                  <Td>{repository.is_storaged}</Td>
+                  <Td isNumeric>{formatNumber(repository.stargazers_count || 0)}</Td>
+                  <Td isNumeric>{formatNumber(repository.watchers_count || 0)}</Td>
                   <Td position="sticky" right="0" backgroundColor="white" textAlign="center">
                     <Tooltip label="More" bg="red.300" placement="top" hasArrow>
                       <Button
@@ -95,7 +92,7 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
                         rounded="full"
                         onClick={() => handleSelectRepository(repository)}
                       >
-                        ...
+                        <AddIcon />
                       </Button>
                     </Tooltip>
                   </Td>
