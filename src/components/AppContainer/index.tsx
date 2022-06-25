@@ -10,6 +10,7 @@ function AppContainer({ children }: ReactProps) {
       display="flex"
       flexDir="column"
       justifyContent="center"
+      alignItems="center"
     >
       {children}
     </Container>
