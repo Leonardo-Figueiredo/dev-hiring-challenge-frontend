@@ -4,35 +4,69 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Th,
   Thead,
-  Tr
+  Tr,
+  Th,
+  Text,
+  Link
 } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { RepoCollection } from '../../entities/repo-collection.entity'
+import { Repo } from '../../entities/repo.entity'
 
-export function RepositoryTable() {
+interface RepositoryTableProps {
+  repository_collection: RepoCollection
+}
+
+export function RepositoryTable({
+  repository_collection
+}: RepositoryTableProps) {
+  const [repositories, setRepositories] = useState<Repo[]>([])
+
+  useEffect(() => {
+    setRepositories(repository_collection.repositories)
+  }, [repository_collection])
+
   return (
-    <TableContainer maxW={['800px']} my={['10']}>
-      <Table size="sm">
+    <TableContainer
+      my={['5']}
+      maxW={['xl']}
+      _last={{
+        marginRight: ['unset', 'unset', 'unset', '50%']
+      }}
+      overflowX="scroll"
+    >
+      <Text mb={['5']}>{repository_collection.language}</Text>
+
+      <Table size="sm" title="JavaScript">
         <Thead>
-          <Th>ID</Th>
-          <Th>Name</Th>
-          <Th>Full name</Th>
-          <Th>Description</Th>
-          <Th>Link</Th>
-          <Th>Action</Th>
+          <Tr>
+            <Th>Name</Th>
+            <Th>Full Name</Th>
+            <Th>Description</Th>
+            <Th>Saved</Th>
+            <Th position="sticky" right="0" backgroundColor="#fff">
+              Action
+            </Th>
+          </Tr>
         </Thead>
 
         <Tbody>
-          <Tr>
-            <Td>1</Td>
-            <Td>JavaScript</Td>
-            <Td>ES6/JavaScript</Td>
-            <Td>JavaScript main repository</Td>
-            <Td>www.google.com.br</Td>
-            <Td>
-              <Button>Save</Button>
-            </Td>
-          </Tr>
+          {repositories.map(repository => (
+            <Tr key={repository.id}>
+              <Td>{repository.name}</Td>
+              <Td>
+                <Link href={repository.html_url} isExternal={true}>
+                  {repository.full_name}
+                </Link>
+              </Td>
+              <Td>{repository.description}</Td>
+              <Td>{repository.is_storaged}</Td>
+              <Td position="sticky" right="0" backgroundColor="#fff">
+                <Button size="sm">Save</Button>
+              </Td>
+            </Tr>
+          ))}
         </Tbody>
       </Table>
     </TableContainer>
