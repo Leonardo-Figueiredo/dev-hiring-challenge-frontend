@@ -28,7 +28,7 @@ export const REPO_FIND_ONE = gql`
       is_storaged
       created_at
       updated_at
-      deleted_at
+      storaged_at
     }
   }
 `

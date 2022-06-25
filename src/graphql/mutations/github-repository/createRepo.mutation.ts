@@ -2,10 +2,13 @@ import { gql } from '@apollo/client'
 import { Repo } from '../../../entities/repo.entity'
 
 export interface CreateRepoInput
-  extends Omit<Repo, 'db_id' | 'is_storaged' | 'created_at' | 'updated_at' | 'deleted_at'> {}
+  extends Omit<Repo, 'db_id' | 'is_storaged' | 'created_at' | 'updated_at' | 'storaged_at'> {}
 
-export interface CreateRepo {
+export interface CreateRepoVars {
   createRepoInput: CreateRepoInput
+}
+export interface CreateRepo {
+  createRepo: Repo
 }
 
 export const CREATE_REPO = gql`
@@ -27,7 +30,7 @@ export const CREATE_REPO = gql`
       is_storaged
       created_at
       updated_at
-      deleted_at
+      storaged_at
     }
   }
 `

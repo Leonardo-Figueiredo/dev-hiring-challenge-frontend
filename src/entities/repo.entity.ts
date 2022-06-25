@@ -15,5 +15,5 @@ export interface Repo {
   is_storaged?: boolean
   created_at?: Date
   updated_at?: Date
-  deleted_at?: Date
+  storaged_at?: Date
 }

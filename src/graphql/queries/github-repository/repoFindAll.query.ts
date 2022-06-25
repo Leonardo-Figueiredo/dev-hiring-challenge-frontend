@@ -26,7 +26,7 @@ export const REPO_FIND_ALL = gql`
         is_storaged
         created_at
         updated_at
-        deleted_at
+        storaged_at
       }
     }
   }
