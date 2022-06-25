@@ -68,7 +68,7 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
               <Tr>
                 <Th>Name</Th>
                 <Th>Stars</Th>
-                <Th>Watchers</Th>
+                <Th>Forks</Th>
                 <Th position="sticky" right="0" backgroundColor="#fff">
                   More
                 </Th>
@@ -81,8 +81,8 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
                   <Td fontWeight="medium" color="gray.900">
                     {repository.name}
                   </Td>
-                  <Td isNumeric>{formatNumber(repository.stargazers_count || 0)}</Td>
-                  <Td isNumeric>{formatNumber(repository.watchers_count || 0)}</Td>
+                  <Td isNumeric>{formatNumber(repository.stargazers_count)}</Td>
+                  <Td isNumeric>{formatNumber(repository.forks)}</Td>
                   <Td position="sticky" right="0" backgroundColor="white" textAlign="center">
                     <Tooltip label="More" bg="red.300" placement="top" hasArrow>
                       <Button
@@ -103,7 +103,13 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
         </TableContainer>
       </Flex>
 
-      <RepositoryDetailModal repository={selectedRepository} isOpen={isOpen} onClose={onClose} />
+      {selectedRepository?.full_name && (
+        <RepositoryDetailModal
+          repository_full_name={selectedRepository.full_name}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </>
   )
 }
