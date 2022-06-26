@@ -23,7 +23,6 @@ import {
   CreateRepoVars,
   CREATE_REPO
 } from '../../graphql/mutations/github-repository/createRepo.mutation'
-import { REPO_FIND_ALL } from '../../graphql/queries/github-repository/repoFindAll.query'
 import { formatNumber } from '../../utils/format-number.util'
 import {
   FindOneRepo,
@@ -77,7 +76,6 @@ export function RepositoryDetailModal({
       })
     },
     refetchQueries: [
-      { query: REPO_FIND_ALL },
       {
         query: REPO_FIND_ONE,
         variables: { repository_full_name }
