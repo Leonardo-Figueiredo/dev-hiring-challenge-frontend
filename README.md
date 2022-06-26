@@ -20,7 +20,7 @@
 
 ### API
 
-- [Dev Hiring Challenge API](https://github.com/Leonardo-Figueiredo/dev-hiring-challenge/tree/main)
+- [Dev Hiring Challenge API](https://github.com/Leonardo-Figueiredo/dev-hiring-challenge)
 
 ### Client
 
