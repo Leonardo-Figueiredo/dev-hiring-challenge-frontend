@@ -2,7 +2,6 @@ import {
   Button,
   Flex,
   HStack,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,7 +10,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
-  Text,
   useToast
 } from '@chakra-ui/react'
 import { CheckIcon, ExternalLinkIcon, NotAllowedIcon } from '@chakra-ui/icons'
@@ -183,13 +181,12 @@ export function RepositoryDetailModal({
 
               <ModalDataField
                 label="Full name"
+                link={repository.html_url}
                 value={
-                  <Text color="gray.600">
-                    <Link isExternal href={repository.html_url} display="flex" alignItems="center">
-                      {repository.full_name}
-                      <ExternalLinkIcon ml="1" />
-                    </Link>
-                  </Text>
+                  <>
+                    {repository.full_name}
+                    <ExternalLinkIcon ml="1" />
+                  </>
                 }
               />
 
