@@ -20,11 +20,6 @@ export function SearchSection() {
 
     onCompleted: data => {
       setRepositories(data.repoFindAll)
-      toast({
-        title: 'Search Success',
-        description: 'Check the best match repositories!',
-        status: 'success'
-      })
     },
     onError: error => {
       const message = error.message || 'Fetch repositories is not available, try again later.'
