@@ -9,7 +9,10 @@ import {
 import { RepositoryTable } from '../RepositoryTable'
 
 export function SearchSection() {
-  const toast = useToast()
+  const toast = useToast({
+    position: 'bottom-right',
+    duration: 3000
+  })
 
   const [repositories, setRepositories] = useState<RepoCollection[]>([])
   const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL, {
@@ -23,18 +26,16 @@ export function SearchSection() {
       toast({
         title: 'Error',
         description: 'Fetch repositories is not available, try again later.',
-        status: 'error',
-        position: 'bottom-right'
+        status: 'error'
       })
 
-    if (data?.repoFindAll) {
+    if (data?.repoFindAll[0]) {
       setRepositories(data.repoFindAll)
 
       toast({
         title: 'Search Success',
         description: 'Check the best match repositories!',
-        status: 'success',
-        position: 'bottom-right'
+        status: 'success'
       })
     }
   }, [fetchRepositories, toast])

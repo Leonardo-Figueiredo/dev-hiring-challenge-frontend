@@ -46,7 +46,10 @@ export function RepositoryDetailModal({
   onClose,
   repository_full_name
 }: RepositoryDetailModalProps) {
-  const toast = useToast()
+  const toast = useToast({
+    position: 'bottom-right',
+    duration: 3000
+  })
 
   const [saveRepository, { loading: saveRepositoryLoading }] = useMutation<
     CreateRepo,
@@ -96,8 +99,7 @@ export function RepositoryDetailModal({
     toast({
       title: `Repository ${saveRepositoryData?.createRepo?.name || repository.name} saved!`,
       description: '',
-      status: 'success',
-      position: 'bottom-right'
+      status: 'success'
     })
   }, [repository, saveRepository, repository_full_name, toast])
 
