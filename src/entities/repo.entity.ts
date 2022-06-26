@@ -1,5 +1,5 @@
 export interface Repo {
-  db_id?: number
+  db_id?: string
   id: number
   name?: string
   full_name?: string
