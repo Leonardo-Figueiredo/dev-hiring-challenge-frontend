@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons'
 import {
   Button,
   Table,
@@ -9,7 +8,6 @@ import {
   Tr,
   Th,
   Text,
-  Tooltip,
   useDisclosure,
   Flex
 } from '@chakra-ui/react'
@@ -67,10 +65,10 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
             <Thead>
               <Tr>
                 <Th>Name</Th>
-                <Th>Stars</Th>
+                <Th isNumeric>Stars</Th>
                 <Th>Forks</Th>
                 <Th position="sticky" right="0" backgroundColor="#fff">
-                  More
+                  Info
                 </Th>
               </Tr>
             </Thead>
@@ -82,19 +80,20 @@ export function RepositoryTable({ repository_collection }: RepositoryTableProps)
                     {repository.name}
                   </Td>
                   <Td isNumeric>{formatNumber(repository.stargazers_count)}</Td>
-                  <Td isNumeric>{formatNumber(repository.forks)}</Td>
-                  <Td position="sticky" right="0" backgroundColor="white" textAlign="center">
-                    <Tooltip label="More" bg="red.300" placement="top" hasArrow>
-                      <Button
-                        size="xs"
-                        variant="ghost"
-                        colorScheme="red"
-                        rounded="full"
-                        onClick={() => handleSelectRepository(repository)}
-                      >
-                        <AddIcon />
-                      </Button>
-                    </Tooltip>
+                  <Td>{formatNumber(repository.forks)}</Td>
+                  <Td position="sticky" right="1" backgroundColor="white" width="50px">
+                    <Button
+                      size="xs"
+                      variant="ghost"
+                      colorScheme="red"
+                      fontSize="xl"
+                      rounded="full"
+                      onClick={() => handleSelectRepository(repository)}
+                      mx="auto"
+                      textAlign="center"
+                    >
+                      ...
+                    </Button>
                   </Td>
                 </Tr>
               ))}

@@ -57,7 +57,7 @@ export function SearchSection() {
           isLoading={loading}
           disabled={loading}
         >
-          {repositories[0] ? 'Search again' : 'Search'}
+          {repositories[0] ? 'Refresh' : 'Search'}
         </Button>
       </Flex>
 

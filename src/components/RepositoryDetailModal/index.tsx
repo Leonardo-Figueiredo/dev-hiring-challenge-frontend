@@ -96,7 +96,8 @@ export function RepositoryDetailModal({
     toast({
       title: `Repository ${saveRepositoryData?.createRepo?.name || repository.name} saved!`,
       description: '',
-      status: 'success'
+      status: 'success',
+      position: 'bottom-right'
     })
   }, [repository, saveRepository, repository_full_name, toast])
 
