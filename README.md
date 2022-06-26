@@ -53,6 +53,7 @@ _You can add a -p flag to set a custom port_
 ## Docker Setup 🐳
 
 - Follow the steps above on [Base Setup](#base-setup).
+- Run `$ docker-compose build development` to create development or production image.
 - To execute **production** container use `$ docker-compose up production`.
 - If you want to execute on background, use **-d** flag, example: `$ docker-compose up -d production`.
 - To execute **development** container use `$ docker-compose up development`.
