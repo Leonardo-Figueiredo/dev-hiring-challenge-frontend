@@ -34,6 +34,11 @@ import {
 } from '../../graphql/queries/github-repository/repoFindOne.query'
 import { formatDate } from '../../utils/format-date.util'
 import { ModalDataField } from './ModalDataField'
+import {
+  DestroyRepo,
+  DestroyRepoVars,
+  DESTROY_REPO
+} from '../../graphql/mutations/github-repository/destroyOne.mutation'
 
 interface RepositoryDetailModalProps {
   isOpen: boolean
@@ -46,29 +51,86 @@ export function RepositoryDetailModal({
   onClose,
   repository_full_name
 }: RepositoryDetailModalProps) {
+  const [repository, setRepository] = useState<Repo>({} as Repo)
+
   const toast = useToast({
-    position: 'bottom-right',
+    position: 'top-right',
     duration: 3000
   })
 
   const [saveRepository, { loading: saveRepositoryLoading }] = useMutation<
     CreateRepo,
     CreateRepoVars
-  >(CREATE_REPO)
+  >(CREATE_REPO, {
+    onCompleted: data => {
+      setRepository(data.createRepo)
+
+      toast({
+        title: `Repository ${data.createRepo.name || repository.name}`,
+        description: 'Saved with success!',
+        status: 'success'
+      })
+    },
+    onError: () => {
+      toast({
+        title: 'Error to save this repository from storage',
+        description: 'Try again later',
+        status: 'error'
+      })
+    },
+    refetchQueries: [
+      { query: REPO_FIND_ALL },
+      {
+        query: REPO_FIND_ONE,
+        variables: { repository_full_name }
+      }
+    ]
+  })
+
+  const [destroyRepository, { loading: destroyRepositoryLoading }] = useMutation<
+    DestroyRepo,
+    DestroyRepoVars
+  >(DESTROY_REPO, {
+    onCompleted: data => {
+      const { destroyOne } = data
+
+      toast({
+        title: `Repository ${destroyOne?.name}`,
+        description: 'Removed with succes',
+        status: 'success'
+      })
+    },
+    onError: () => {
+      toast({
+        title: 'Error to remove this repository from storage',
+        description: 'Try again later',
+        status: 'error'
+      })
+    },
+    refetchQueries: [
+      {
+        query: REPO_FIND_ONE,
+        variables: { repository_full_name }
+      }
+    ]
+  })
+
   const [findOneRepo, { loading: findOneRepoLoading }] = useLazyQuery<
     FindOneRepo,
     FindOneRepoInput
-  >(REPO_FIND_ONE)
+  >(REPO_FIND_ONE, {
+    onCompleted: data => {
+      const { repoFindOne } = data
 
-  const [repository, setRepository] = useState<Repo>({} as Repo)
+      setRepository(repoFindOne)
+    }
+  })
 
   useEffect(() => {
     async function fetchRepository() {
-      const { data: findOneRepoData } = await findOneRepo({
+      await findOneRepo({
         variables: { repository_full_name }
       })
-
-      if (findOneRepoData?.repoFindOne) setRepository(findOneRepoData.repoFindOne)
     }
 
     if (repository_full_name && isOpen) fetchRepository()
@@ -82,26 +144,14 @@ export function RepositoryDetailModal({
 
     const createRepoInput: CreateRepoInput = clonedRepository
 
-    const { data: saveRepositoryData } = await saveRepository({
-      variables: { createRepoInput },
-      refetchQueries: [
-        { query: REPO_FIND_ALL },
-        {
-          query: REPO_FIND_ONE,
-          variables: { repository_full_name }
-        }
-      ],
-      awaitRefetchQueries: true
-    })
+    await saveRepository({ variables: { createRepoInput } })
+  }, [repository, saveRepository])
 
-    if (saveRepositoryData?.createRepo) setRepository(saveRepositoryData.createRepo)
-
-    toast({
-      title: `Repository ${saveRepositoryData?.createRepo?.name || repository.name} saved!`,
-      description: '',
-      status: 'success'
+  const handleRemoveRepository = useCallback(async () => {
+    await destroyRepository({
+      variables: { repository_github_id: repository.id }
     })
-  }, [repository, saveRepository, repository_full_name, toast])
+  }, [destroyRepository, repository.id])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -168,7 +218,17 @@ export function RepositoryDetailModal({
             </ModalBody>
 
             <ModalFooter>
-              {!repository?.is_storaged && (
+              {repository?.is_storaged ? (
+                <Button
+                  variant="outline"
+                  colorScheme="yellow"
+                  onClick={handleRemoveRepository}
+                  isLoading={destroyRepositoryLoading}
+                  disabled={destroyRepositoryLoading}
+                >
+                  Remove from storage
+                </Button>
+              ) : (
                 <Button
                   variant="outline"
                   colorScheme="green"
