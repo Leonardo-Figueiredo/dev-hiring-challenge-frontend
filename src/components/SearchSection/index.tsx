@@ -16,29 +16,31 @@ export function SearchSection() {
 
   const [repositories, setRepositories] = useState<RepoCollection[]>([])
   const [fetchRepositories, { loading }] = useLazyQuery<RepoFindAll>(REPO_FIND_ALL, {
-    fetchPolicy: 'network-only'
-  })
+    fetchPolicy: 'network-only',
 
-  const handleButtonSearch = useCallback(async () => {
-    const { data, error } = await fetchRepositories()
-
-    if (error)
-      toast({
-        title: 'Error',
-        description: 'Fetch repositories is not available, try again later.',
-        status: 'error'
-      })
-
-    if (data?.repoFindAll[0]) {
+    onCompleted: data => {
       setRepositories(data.repoFindAll)
-
       toast({
         title: 'Search Success',
         description: 'Check the best match repositories!',
         status: 'success'
       })
+    },
+    onError: error => {
+      const message = error.message || 'Fetch repositories is not available, try again later.'
+
+      toast({
+        title: 'Error',
+        description: message,
+        status: 'error',
+        duration: 10000
+      })
     }
-  }, [fetchRepositories, toast])
+  })
+
+  const handleButtonSearch = useCallback(async () => {
+    await fetchRepositories()
+  }, [fetchRepositories])
 
   return (
     <>
