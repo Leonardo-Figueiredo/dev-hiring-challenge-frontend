@@ -37,7 +37,7 @@ export function SearchSection() {
         position: 'bottom-right'
       })
     }
-  }, [fetchRepositories, repositories, toast])
+  }, [fetchRepositories, toast])
 
   return (
     <>
