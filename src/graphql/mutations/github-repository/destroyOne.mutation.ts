@@ -24,10 +24,10 @@ export const DESTROY_REPO = gql`
       open_issues
       forks
       watchers
-      is_storaged
+      is_stored
       created_at
       updated_at
-      storaged_at
+      stored_at
     }
   }
 `

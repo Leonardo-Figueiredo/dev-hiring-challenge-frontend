@@ -137,8 +137,8 @@ export function RepositoryDetailModal({
   const handleSaveRepository = useCallback(async () => {
     const clonedRepository = structuredClone(repository)
     delete clonedRepository?.db_id
-    delete clonedRepository?.is_storaged
-    delete clonedRepository?.storaged_at
+    delete clonedRepository?.is_stored
+    delete clonedRepository?.stored_at
 
     const createRepoInput: CreateRepoInput = clonedRepository
 
@@ -171,7 +171,7 @@ export function RepositoryDetailModal({
 
                 <HStack alignItems="center" my="1">
                   <ModalValueLabel label="Storaged:" />
-                  {repository.is_storaged ? (
+                  {repository.is_stored ? (
                     <CheckIcon color="green" />
                   ) : (
                     <NotAllowedIcon color="red.300" />
@@ -208,14 +208,14 @@ export function RepositoryDetailModal({
                   label="Last Github update"
                   value={formatDate(repository.updated_at)}
                 />
-                {repository?.is_storaged && (
-                  <ModalDataField label="Storaged at" value={formatDate(repository.storaged_at)} />
+                {repository?.is_stored && (
+                  <ModalDataField label="Storaged at" value={formatDate(repository.stored_at)} />
                 )}
               </Flex>
             </ModalBody>
 
             <ModalFooter>
-              {repository?.is_storaged ? (
+              {repository?.is_stored ? (
                 <Button
                   variant="outline"
                   colorScheme="yellow"

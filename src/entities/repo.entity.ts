@@ -12,8 +12,8 @@ export interface Repo {
   open_issues?: number
   forks?: number
   watchers?: number
-  is_storaged?: boolean
+  is_stored?: boolean
   created_at?: Date
   updated_at?: Date
-  storaged_at?: Date
+  stored_at?: Date
 }
