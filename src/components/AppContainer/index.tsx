@@ -5,7 +5,6 @@ function AppContainer({ children }: ReactProps) {
   return (
     <Container
       py={[4]}
-      width={['100%']}
       maxW={['1200px']}
       display="flex"
       flexDir="column"
