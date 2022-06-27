@@ -68,12 +68,16 @@ export function RepositoryDetailModal({
         status: 'success'
       })
     },
-    onError: () => {
+    onError: error => {
+      const message = error.message || 'Try again later'
+
       toast({
-        title: 'Error to save this repository from storage',
-        description: 'Try again later',
-        status: 'error'
+        title: 'Error',
+        description: message,
+        status: 'error',
+        duration: 10000
       })
+      onClose()
     },
     refetchQueries: [
       {
@@ -96,12 +100,16 @@ export function RepositoryDetailModal({
         status: 'success'
       })
     },
-    onError: () => {
+    onError: error => {
+      const message = error.message || 'Try again later'
+
       toast({
-        title: 'Error to remove this repository from storage',
-        description: 'Try again later',
-        status: 'error'
+        title: 'Error',
+        description: message,
+        status: 'error',
+        duration: 10000
       })
+      onClose()
     },
     refetchQueries: [
       {
@@ -119,6 +127,17 @@ export function RepositoryDetailModal({
       const { repoFindOne } = data
 
       setRepository(repoFindOne)
+    },
+    onError: error => {
+      const message = error.message || 'Try again later'
+
+      toast({
+        title: 'Error',
+        description: message,
+        status: 'error',
+        duration: 10000
+      })
+      onClose()
     }
   })
 
